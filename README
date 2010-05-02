@@ -47,7 +47,9 @@ ruby ~/Downloads/dir2rss_gen.rb > ~/Downloads/dir2rss.xml
 
 You should put this in your crontab:
 
-*/5 * * * *  ~/Downloads/dir2rss_gen.rb > ~/Downloads/dir2rss.xml
+*/5 * * * *  ruby ~/Downloads/dir2rss_gen.rb > ~/Downloads/dir2rss.xml
+
+The "*/5" part means every 5 minutes. One can change it to 10, 15, 20 etc.
 
 Read http://en.wikipedia.org/wiki/Cron to learn about crontab.
 
