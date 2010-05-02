@@ -1,0 +1,94 @@
+dir2rss -- lightweight server for turning a folder into a feed, primarily for iTunes
+
+language: Ruby
+platform: POSIX-compatible, generally OS X
+license: GPLv3
+
+If you use iTunes, you may find that for non-music files, it is generally
+easier if they arrive as podcasts. You can't add this audio miscellany to
+podcasts - either you have to categorise it as an audiobook or you have to keep
+it as music. Having a 'misc' feed would be very useful for all the audio
+clutter one finds in one's ~/Downloads folder. I've been meaning to build
+something like this for a while, but then James O'Malley (Psythor on Twitter)
+suggested it.
+
+At http://twitter.com/Psythor/status/13249291825, James O'Malley wrote:
+> Does this exist: podcast RSS feeds generated from local Mac OS folder, so
+> MP3s I download can dump to the same folder and listen as podcast?
+
+PREREQUISITES
+-------------
+
+Ruby 1.8 (haven't tested it with 1.9)
+- if you are using OS X, you'll have 1.8.7 by default
+
+Gems:
+- builder
+- mp3info
+- mongrel
+
+(On OS X: sudo gem install mongrel etc.)
+
+Knowledge of how to operate your firewall.
+
+crontab turned on.
+
+USAGE
+-----
+
+dir2rss_gen.rb is the script which converts your nominated folder into an RSS
+2.0 feed and puts that out on STDOUT. You need to pipe this into an output
+file. Given that you are probably interested in your Downloads folder, here's
+how you'd formulate that.
+
+Put your dir2rss_gen.rb script in the downloads folder.
+
+ruby ~/Downloads/dir2rss_gen.rb > ~/Downloads/dir2rss.xml
+
+You should put this in your crontab:
+
+*/5 * * * *  ~/Downloads/dir2rss_gen.rb > ~/Downloads/dir2rss.xml
+
+Read http://en.wikipedia.org/wiki/Cron to learn about crontab.
+
+This will basically run the RSS generation script every five minutes. Sometime,
+I'd like to do this with FSEvents (or Linux's inotify, or Windows' File
+Alternation Monitor API or kqueues) but that was too much work for a Sunday
+afternoon. But if I can be bothered, this would make it so that as soon as the
+nominated folder is updated (i.e. when you download a file), it would re-run
+the generation script.
+
+The generation script is easy enough: it has some fancy FP lambda stuff which
+is because I want to show that I'm really a Lisp weenie in a Ruby weenie's
+body. The audio_only variable designates whether it looks only for audio
+(anything that ends in mp3 or m4a) or video too (mp4, mov, m4v). I've excluded
+PDFs even though they conform to iTunes' requirements. Why? Because PDFcasts
+are totally stupid. Why do I want to read PDFs in my media player? That's about
+as useful as having chocolate on my pizza.
+
+What makes this difficult is that you have to serve everything from HTTP:
+iTunes just doesn't deal with file:. It can't read an XML file served from
+file: and it certainly can't read the media files from there.
+
+Basically you need to generate your XML file and serve that from an HTTP server
+and you need to serve the media itself from an HTTP server.
+
+So you need to run a server. I've included a script to run a Mongrel server,
+but I can't get it to run. The other alternatives are to use a WEBrick server,
+to setup OS X's Apache as a server or to use Python's SimpleHTTPServer (I like
+that option and use it myself when I need to run simple web servers for
+chucking files around).
+
+SEE ALSO
+--------
+
+Huffduffer - does something very similar. Basically a media bookmarking system,
+sort of like Instapaper for audio. ;)
+http://huffduffer.com -- created by @adactio 
+
+CONTACT
+-------
+
+Tom Morris <tom@tommorris.org>
+
+PayPal appreciated.
