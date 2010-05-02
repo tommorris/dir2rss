@@ -62,7 +62,7 @@ builder.rss("version" => "2.0", "xmlns:itunes" => "http://www.itunes.com/dtds/po
           # read up on ISO 8601. It is the date-time format of sane people.
           # see http://microformats.org/wiki/iso-8601
         uri = "http://localhost:#{port.to_s}" + file[:name]
-        type = case file[:name]
+        ftype = case file[:name]
           when /\.mp3$/; "audio/mpeg"
           when /\.m4a$/; "audio/mp4"
           when /\.mp4$/; "video/mp4"
@@ -70,7 +70,7 @@ builder.rss("version" => "2.0", "xmlns:itunes" => "http://www.itunes.com/dtds/po
           when /\.m4v$/; "video/mp4"
           when /\.pdf$/; "application/pdf"
         end
-        rss.enclosure("url" => uri, "length" => file[:size].to_s, "type" => type)
+        rss.enclosure("url" => uri, "length" => file[:size].to_s, "type" => ftype)
         rss.guid(uri) # never got the point of guid's in RSS - URIs should be unique enough for everything.
       end
     end
