@@ -27,8 +27,8 @@ files = `find .`.split(/\n/).delete_if(&comparator)
 # It doesn't actually delete your files, it filters the list of files using the comparator function we've just defined.
 
 # Next we need to expand all the paths, get the file data and sort them by mtime.
-files = files.map {|i| File.expand_path(i, root)}
-files = files.map {|i| {:name => i, :mtime => File.new(i).mtime, :size => File.size(i)}}
+files.map! {|i| File.expand_path(i, root)}
+files.map! {|i| {:name => i, :mtime => File.new(i).mtime, :size => File.size(i)}}
 files = files.sort_by {|x| x[:mtime]}.reverse
 
 # Now we need to extract all the metadata and turn it into an RSS item.
