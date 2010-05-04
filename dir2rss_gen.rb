@@ -23,7 +23,7 @@ end
 Dir.chdir(root)
 files = `find .`.split(/\n/).delete_if(&comparator)
 # Note for scaredy-cats: delete_if isn't deleting the file - rather, it is part of the inherent crapness
-# of Ruby. Rather than calling it 'filter' like Java would or 'Where' like .NET does, Ruby calls it delete_if.
+# of Ruby. Rather than calling it 'filter' like Scala would or 'Where' like .NET does, Ruby calls it delete_if.
 # It doesn't actually delete your files, it filters the list of files using the comparator function we've just defined.
 
 # Next we need to expand all the paths, get the file data and sort them by mtime.
